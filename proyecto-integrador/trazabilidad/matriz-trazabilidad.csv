@@ -1,0 +1,16 @@
+req_id,requerimiento,tc_id,caso_de_prueba,tecnica,archivo_prueba,estado,def_id
+REQ-DSC-001,Cliente premium recibe 10% base y standard 0%,TC-DSC-EP-001,Partición válida: standard sin cupón bajo umbral → 0%,Partición de equivalencias,tests/test_equivalence_boundary.py,PASS,
+REQ-DSC-001,Cliente premium recibe 10% base y standard 0%,TC-DSC-EP-002,Partición válida: premium sin cupón bajo umbral → 10%,Partición de equivalencias,tests/test_equivalence_boundary.py,PASS,
+REQ-DSC-002,Pedido >= 1000 suma 5% por volumen,TC-DSC-BVA-003,Límite inferior del umbral: 999.99 → sin bono de volumen,Análisis de valores límite,tests/test_equivalence_boundary.py,PASS,
+REQ-DSC-002,Pedido >= 1000 suma 5% por volumen,TC-DSC-BVA-004,Límite exacto del umbral: 1000.00 → con bono de volumen,Análisis de valores límite,tests/test_equivalence_boundary.py,PASS,
+REQ-DSC-003,Cupón válido suma 5% adicional,TC-DT-R2,Regla DT-R2: standard + cupón → 5%,Tabla de decisión,tests/test_decision_table.py,PASS,
+REQ-DSC-004,El descuento total nunca excede 15%,TC-DT-R8,Regla DT-R8: premium + volumen + cupón → tope 15%,Tabla de decisión,tests/test_decision_table.py,PASS,
+REQ-DSC-005,order_total debe estar en (0; 10000],TC-DSC-INV-001,Partición inválida: order_total = 0 → ValueError,Partición de equivalencias + BVA,tests/test_equivalence_boundary.py,PASS,
+REQ-DSC-005,order_total debe estar en (0; 10000],TC-DSC-INV-002,Partición inválida: order_total = 10000.01 → ValueError,Análisis de valores límite,tests/test_equivalence_boundary.py,PASS,
+REQ-DSC-005,order_total debe estar en (0; 10000],TC-DSC-INV-003,Partición inválida: customer_type desconocido → ValueError,Partición de equivalencias,tests/test_equivalence_boundary.py,PASS,
+REQ-MTX-001,La matriz cross-browser cubre todos los pares exigibles de parámetros,TC-PW-001,Pairwise reduce el producto cartesiano respetando restricciones,Pruebas combinatorias (pairwise),tests/test_pairwise.py,PASS,
+REQ-MTX-001,La matriz cross-browser cubre todos los pares exigibles de parámetros,TC-PW-002,Gap analysis: ningún par exigible queda sin cubrir tras complementar,Pruebas combinatorias (pairwise),tests/test_pairwise.py,PASS,DEF-001
+DEF-001,allpairspy con filter_func sacrifica pares válidos (chromium/firefox × macos) — mitigado con pairwise_matrix.py,,,,design_lab/pairwise_matrix.py,CERRADO,
+REQ-LOG-001,POR COMPLETAR (Ejercicio individual S1 — login de SauceDemo),,,,,PENDIENTE,
+REQ-LOG-002,POR COMPLETAR (Ejercicio individual S1 — login de SauceDemo),,,,,PENDIENTE,
+REQ-LOG-003,POR COMPLETAR (Ejercicio individual S1 — login de SauceDemo),,,,,PENDIENTE,

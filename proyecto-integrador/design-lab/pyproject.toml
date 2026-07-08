@@ -1,0 +1,18 @@
+[project]
+name = "design-lab"
+version = "0.1.0"
+description = "Sesión 1 — laboratorio de técnicas de diseño de pruebas: EP, BVA, tabla de decisión y pairwise"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "allpairspy>=2.5",
+    "pyyaml>=6.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"

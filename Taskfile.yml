@@ -1,0 +1,17 @@
+version: "3"
+
+vars:
+  DESIGN_LAB: proyecto-integrador/design-lab
+
+tasks:
+  setup:
+    desc: "Instala dependencias del laboratorio de la Sesión 1 (uv sync)"
+    dir: "{{.DESIGN_LAB}}"
+    cmds:
+      - uv sync
+
+  test:design:
+    desc: "Sesión 1 — suite de técnicas de diseño: EP, BVA, decisión y pairwise"
+    dir: "{{.DESIGN_LAB}}"
+    cmds:
+      - uv run pytest -v

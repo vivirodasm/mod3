@@ -1,0 +1,43 @@
+# Tabla de decisión completa — REQ-DSC-001..004 (2^3 = 8 reglas)
+# Separación lógica/datos: los datos viven aquí; la lógica en tests/test_decision_table.py
+rules:
+  - id: DT-R1
+    customer_type: standard
+    order_total: 500.0
+    has_coupon: false
+    expected: 0.0
+  - id: DT-R2
+    customer_type: standard
+    order_total: 500.0
+    has_coupon: true
+    expected: 5.0
+  - id: DT-R3
+    customer_type: standard
+    order_total: 1500.0
+    has_coupon: false
+    expected: 5.0
+  - id: DT-R4
+    customer_type: standard
+    order_total: 1500.0
+    has_coupon: true
+    expected: 10.0
+  - id: DT-R5
+    customer_type: premium
+    order_total: 500.0
+    has_coupon: false
+    expected: 10.0
+  - id: DT-R6
+    customer_type: premium
+    order_total: 500.0
+    has_coupon: true
+    expected: 15.0
+  - id: DT-R7
+    customer_type: premium
+    order_total: 1500.0
+    has_coupon: false
+    expected: 15.0
+  - id: DT-R8
+    customer_type: premium
+    order_total: 1500.0
+    has_coupon: true
+    expected: 15.0   # REQ-DSC-004: tope — sin la tabla, este caso se escaparía
