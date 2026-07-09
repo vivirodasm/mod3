@@ -2,16 +2,38 @@ version: "3"
 
 vars:
   DESIGN_LAB: proyecto-integrador/design-lab
+  UI_LAB: proyecto-integrador/ui-lab
 
 tasks:
+  # ── Sesión 1: Diseño de pruebas ───────────────────────────────────────────
   setup:
-    desc: "Instala dependencias del laboratorio de la Sesión 1 (uv sync)"
+    desc: "S1 — Instala dependencias del laboratorio de diseño (uv sync)"
     dir: "{{.DESIGN_LAB}}"
     cmds:
       - uv sync
 
   test:design:
-    desc: "Sesión 1 — suite de técnicas de diseño: EP, BVA, decisión y pairwise"
+    desc: "S1 — Suite de técnicas de diseño: EP, BVA, decisión y pairwise"
     dir: "{{.DESIGN_LAB}}"
     cmds:
       - uv run pytest -v
+
+  # ── Sesión 2: POM, Screenplay y Data-Driven ───────────────────────────────
+  setup:ui:
+    desc: "S2 — Instala dependencias del laboratorio de UI y descarga Chromium"
+    dir: "{{.UI_LAB}}"
+    cmds:
+      - uv sync --group dev
+      - uv run playwright install chromium
+
+  test:ui:
+    desc: "S2 — Suite de UI: POM, Screenplay y data-driven sobre SauceDemo"
+    dir: "{{.UI_LAB}}"
+    cmds:
+      - uv run pytest -v
+
+  test:ui:headed:
+    desc: "S2 — Suite de UI con navegador visible (útil para depurar)"
+    dir: "{{.UI_LAB}}"
+    cmds:
+      - uv run pytest --headed -v

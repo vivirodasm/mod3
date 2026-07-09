@@ -1,0 +1,35 @@
+# Catálogo de productos de SauceDemo usados en los tests de carrito.
+# Al separar los datos del código, agregar un nuevo escenario
+# es tan simple como añadir una línea aquí — sin tocar los tests.
+
+products:
+  - name: "Sauce Labs Backpack"
+    price: 29.99
+  - name: "Sauce Labs Bike Light"
+    price: 9.99
+  - name: "Sauce Labs Bolt T-Shirt"
+    price: 15.99
+  - name: "Sauce Labs Fleece Jacket"
+    price: 49.99
+
+# Escenarios de compra para tests data-driven del carrito.
+# 'items' es la lista de productos a agregar; 'count' es cuántos
+# debe mostrar la burbuja del carrito al terminar.
+cart_scenarios:
+  - description: "agregar un solo producto"
+    items:
+      - "Sauce Labs Backpack"
+    count: 1
+
+  - description: "agregar dos productos distintos"
+    items:
+      - "Sauce Labs Backpack"
+      - "Sauce Labs Bike Light"
+    count: 2
+
+  - description: "agregar tres productos distintos"
+    items:
+      - "Sauce Labs Backpack"
+      - "Sauce Labs Bike Light"
+      - "Sauce Labs Bolt T-Shirt"
+    count: 3
