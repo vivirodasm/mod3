@@ -24,5 +24,5 @@ Thumbs.db
 # Qoder
 .qoder/
 
-# Instructor-only session guides (NOT for students)
-sesiones/**/SESION_*.md
+# Instructor-only guides (NOT for students)
+sesiones/**/GUIA_*.md
