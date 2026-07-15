@@ -3,6 +3,7 @@ version: "3"
 vars:
   DESIGN_LAB: proyecto-integrador/design-lab
   UI_LAB: proyecto-integrador/ui-lab
+  API_TESTS: proyecto-integrador/api-tests
 
 tasks:
   # ── Sesión 1: Diseño de pruebas ───────────────────────────────────────────
@@ -37,3 +38,11 @@ tasks:
     dir: "{{.UI_LAB}}"
     cmds:
       - uv run pytest --headed -v
+
+  # ── Sesión 3: APIs REST con Postman + Newman ──────────────────────────────
+  test:api:postman:
+    desc: "S3 — Corre la colección Postman de CRUD con Newman (vía npx)"
+    dir: "{{.API_TESTS}}"
+    cmds:
+      - npx --yes newman run postman/s3_crud_jsonplaceholder.postman_collection.json
+        --environment postman/jsonplaceholder.postman_environment.json
