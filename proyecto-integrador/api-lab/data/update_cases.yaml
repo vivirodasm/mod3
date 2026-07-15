@@ -1,0 +1,26 @@
+# Casos de actualización (PUT) — Sesión 4, Bloque C
+# El test lee este archivo y genera un test por cada caso.
+casos:
+  - nombre: actualizar_titulo
+    post_id: 1
+    payload:
+      id: 1
+      title: "Título corregido por QA"
+      body: "El body original se conserva en este caso"
+      userId: 1
+
+  - nombre: actualizar_body
+    post_id: 2
+    payload:
+      id: 2
+      title: "Título sin cambios"
+      body: "Body completamente nuevo tras la revisión"
+      userId: 1
+
+  - nombre: actualizar_todo
+    post_id: 3
+    payload:
+      id: 3
+      title: "Todo nuevo"
+      body: "Título y body reemplazados en una sola operación"
+      userId: 2

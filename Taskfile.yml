@@ -4,6 +4,7 @@ vars:
   DESIGN_LAB: proyecto-integrador/design-lab
   UI_LAB: proyecto-integrador/ui-lab
   API_TESTS: proyecto-integrador/api-tests
+  API_LAB: proyecto-integrador/api-lab
 
 tasks:
   # ── Sesión 1: Diseño de pruebas ───────────────────────────────────────────
@@ -46,3 +47,16 @@ tasks:
     cmds:
       - npx --yes newman run postman/s3_crud_jsonplaceholder.postman_collection.json
         --environment postman/jsonplaceholder.postman_environment.json
+
+  # ── Sesión 4: APIs con Python (httpx + pytest) ────────────────────────────
+  setup:api:
+    desc: "S4 — Instala dependencias del laboratorio de APIs (uv sync)"
+    dir: "{{.API_LAB}}"
+    cmds:
+      - uv sync --group dev
+
+  test:api:
+    desc: "S4 — Suite de APIs: cliente httpx, fixtures y data-driven sobre JSONPlaceholder"
+    dir: "{{.API_LAB}}"
+    cmds:
+      - uv run pytest -v

@@ -1,0 +1,18 @@
+[
+  {
+    "caso": "post_normal",
+    "payload": { "title": "Reporte de regresión semanal", "body": "Todo en verde", "userId": 1 }
+  },
+  {
+    "caso": "titulo_largo",
+    "payload": { "title": "Un título muy largo para verificar que la API no lo trunca ni lo rechaza cuando supera los cien caracteres de longitud total", "body": "Cuerpo corto", "userId": 2 }
+  },
+  {
+    "caso": "caracteres_especiales",
+    "payload": { "title": "Áéíóú ñ 中文 🚀 <script>", "body": "Caracteres especiales y unicode", "userId": 3 }
+  },
+  {
+    "caso": "body_vacio",
+    "payload": { "title": "Post sin cuerpo", "body": "", "userId": 4 }
+  }
+]
