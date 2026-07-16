@@ -250,7 +250,21 @@ Sin tarea — llega fresco al reto del Bloque C. 💪
 
 ### 1. El problema: el test pasa, pero la API cambió
 
-Imagina que el equipo de backend renombra `title` a `postTitle`. Tu test de "status 200" sigue pasando… pero **todas las apps que consumen esa API se rompieron**. Necesitamos validar la **estructura**, no solo el status.
+Imagina que el equipo de backend renombra `title` a `postTitle` en un refactor. Mira lo que pasa con la respuesta:
+
+```
+ANTES                                DESPUÉS del refactor
+200 OK                               200 OK   ← para el server NO es un error
+{ "id": 1, "title": "Hola" }         { "id": 1, "postTitle": "Hola" }
+```
+
+La cadena del desastre, paso a paso:
+
+1. **El server sigue devolviendo 200** — renombrar un campo no es un error para él; responde un JSON válido, solo que con otro nombre.
+2. **Tu test `pm.response.to.have.status(200)` sigue verde** — ese test solo mira la primera línea de la respuesta; nunca abre el body.
+3. **La app que consume la API hace `respuesta.title`** — el campo ya no existe → `undefined` → pantalla vacía en producción. Y el release lo aprobó QA.
+
+**Moraleja:** el status dice "el server respondió"; la estructura dice "respondió **lo que espero**". Necesitamos validar las dos cosas — y a eso se le llama **contrato**.
 
 ### 2. JSON Schema: el contrato de la respuesta
 
