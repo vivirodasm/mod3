@@ -1,0 +1,18 @@
+[project]
+name = "api-lab"
+version = "0.1.0"
+description = "Sesión 4 — laboratorio de APIs: cliente httpx, fixtures pytest y data-driven sobre JSONPlaceholder"
+requires-python = ">=3.12"
+dependencies = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra --tb=short"
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.1.1",
+    "pyyaml>=6.0.3",
+]

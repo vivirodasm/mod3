@@ -17,7 +17,7 @@
 - S3 → Hoy bajamos una capa: probamos **directo la API**, sin navegador
 - **Por qué importa:** los tests de API son ~10× más rápidos y estables que los de UI
 
-### Slide 3 — ¿Qué es una API REST? (5 min)
+### Slide 3 — ¿Qué es una API REST? (y sus vecinos SOAP y GraphQL) (5 min)
 - **API** = *Application Programming Interface* — el "mesero" entre apps
 - **REST** = *Representational State Transfer* — todo es un recurso con URL
 - Pides con **verbos HTTP**, recibes **JSON** (*JavaScript Object Notation*)
@@ -26,6 +26,9 @@
 GET https://jsonplaceholder.typicode.com/posts/1
 → { "userId": 1, "id": 1, "title": "...", "body": "..." }
 ```
+
+- Los otros dos estilos que existen: **SOAP** (*Simple Object Access Protocol* — XML formal, banca/legados) y **GraphQL** (un endpoint, el cliente elige los campos)
+- Los conceptos de hoy (status, payload, contratos) aplican a los tres — el curso domina REST, el estándar de facto
 
 ### Slide 4 — Los 5 verbos = CRUD (5 min)
 | Verbo | CRUD | Ejemplo |
@@ -108,10 +111,18 @@ npx --yes newman run postman/s3_crud_jsonplaceholder.postman_collection.json \
 ---
 
 ### Slide 15 — El test que pasa… y la app rota (4 min)
-- Backend renombra `title` → `postTitle`
-- Tu test de "status 200" sigue verde 😱
-- Las apps que consumen la API explotan
-- **Moraleja:** validar el status no basta — hay que validar la **estructura**
+- Backend renombra un campo en un refactor: `title` → `postTitle`
+
+```
+ANTES                                DESPUÉS del refactor
+200 OK                               200 OK   ← para el server NO es un error
+{ "id": 1, "title": "Hola" }         { "id": 1, "postTitle": "Hola" }
+```
+
+- Tu test: `pm.response.to.have.status(200)` → **sigue verde** 😱
+  (solo mira la primera línea de la respuesta — **nunca abre el body**)
+- La app móvil: `titulo = respuesta.title` → `undefined` → **pantalla vacía**
+- **Moraleja:** el status dice "el server respondió"; la **estructura** dice "respondió LO QUE ESPERO". Hay que validar las dos
 
 ### Slide 16 — JSON Schema: el contrato (8 min)
 ```javascript

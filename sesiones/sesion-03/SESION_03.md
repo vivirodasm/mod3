@@ -62,7 +62,19 @@ npx --yes newman run postman/s3_crud_jsonplaceholder.postman_collection.json \
 
 **CRUD** = *Create, Read, Update, Delete* — las 4 operaciones básicas sobre cualquier dato.
 
-### 2. Códigos de estado (status codes) — el idioma de la API
+### 2. REST no está solo: SOAP y GraphQL
+
+En el mundo real te vas a topar con tres estilos de API. Conviene saber ubicarlos:
+
+| Estilo | Qué es | Cuándo te lo topas |
+|---|---|---|
+| **REST** | Recursos + verbos HTTP + JSON. El estándar de facto | La gran mayoría de las APIs modernas — es el que dominamos en el curso |
+| **SOAP** (*Simple Object Access Protocol*) | Protocolo formal basado en XML (*Extensible Markup Language*), con contratos WSDL estrictos | Banca, seguros, gobierno — sistemas legados que no van a desaparecer |
+| **GraphQL** | Un solo endpoint; el **cliente** decide qué campos pedir en la consulta | Apps con muchas vistas distintas (creado por Facebook/Meta) |
+
+**Para QA lo esencial es:** los conceptos de hoy (status codes, validación de payload, contratos) aplican a los tres. Cambia el formato del mensaje, no la disciplina de prueba. Postman, de hecho, soporta los tres.
+
+### 3. Códigos de estado (status codes) — el idioma de la API
 
 | Familia | Significado | Los que más vas a ver |
 |---|---|---|
@@ -73,7 +85,7 @@ npx --yes newman run postman/s3_crud_jsonplaceholder.postman_collection.json \
 
 > **Regla de oro:** si te devuelve `4xx`, el problema está en tu request. Si es `5xx`, el problema está del otro lado.
 
-### 3. Headers — los metadatos del mensaje
+### 4. Headers — los metadatos del mensaje
 
 Los **headers** (cabeceras) viajan con cada request/response y describen el contenido:
 
@@ -81,13 +93,13 @@ Los **headers** (cabeceras) viajan con cada request/response y describen el cont
 - `Authorization: Bearer <token>` → "estas son mis credenciales"
 - `Cache-Control` → "así se puede (o no) cachear esta respuesta"
 
-### 4. Tu primer request en Postman
+### 5. Tu primer request en Postman
 
 1. Abre Postman → botón **New** → **HTTP Request**.
 2. Método: `GET` · URL: `https://jsonplaceholder.typicode.com/posts/1`
 3. Presiona **Send** y observa: el **status** (200 OK), el **tiempo**, el **tamaño** y el **body** con el JSON.
 
-### 5. Variables: nunca escribas la URL dos veces
+### 6. Variables: nunca escribas la URL dos veces
 
 En Postman hay variables de **entorno** (environment) y de **colección**. Nuestro environment define:
 
@@ -99,7 +111,7 @@ Y desde ahí, toda URL se escribe como `{{base_url}}/posts/1`. Si mañana la API
 
 > Importa los dos archivos del repo en Postman: **Import** → arrastra `postman/s3_crud_jsonplaceholder.postman_collection.json` y `postman/jsonplaceholder.postman_environment.json`. Luego selecciona el environment "JSONPlaceholder · Curso QA" en el dropdown de arriba a la derecha.
 
-### 6. Tests en Postman: JavaScript que valida la respuesta
+### 7. Tests en Postman: JavaScript que valida la respuesta
 
 Cada request puede llevar una pestaña **Scripts → Post-response** (antes llamada "Tests") con validaciones:
 
@@ -117,7 +129,7 @@ pm.test('El header Content-Type es JSON', function () {
 });
 ```
 
-### 7. Pre-request scripts: código que corre ANTES de enviar
+### 8. Pre-request scripts: código que corre ANTES de enviar
 
 Sirven para preparar datos dinámicos. En nuestro `03 · POST Crear post`:
 
@@ -129,7 +141,7 @@ pm.collectionVariables.set('dynamic_title', titulo);
 
 Y el body del request lo usa con `{{dynamic_title}}`. Así el test **nunca depende de datos quemados** (*hardcoded*).
 
-### 8. Encadenar requests: el id creado se reutiliza
+### 9. Encadenar requests: el id creado se reutiliza
 
 En el test del POST guardamos el `id` que devolvió la API:
 
@@ -238,7 +250,21 @@ Sin tarea — llega fresco al reto del Bloque C. 💪
 
 ### 1. El problema: el test pasa, pero la API cambió
 
-Imagina que el equipo de backend renombra `title` a `postTitle`. Tu test de "status 200" sigue pasando… pero **todas las apps que consumen esa API se rompieron**. Necesitamos validar la **estructura**, no solo el status.
+Imagina que el equipo de backend renombra `title` a `postTitle` en un refactor. Mira lo que pasa con la respuesta:
+
+```
+ANTES                                DESPUÉS del refactor
+200 OK                               200 OK   ← para el server NO es un error
+{ "id": 1, "title": "Hola" }         { "id": 1, "postTitle": "Hola" }
+```
+
+La cadena del desastre, paso a paso:
+
+1. **El server sigue devolviendo 200** — renombrar un campo no es un error para él; responde un JSON válido, solo que con otro nombre.
+2. **Tu test `pm.response.to.have.status(200)` sigue verde** — ese test solo mira la primera línea de la respuesta; nunca abre el body.
+3. **La app que consume la API hace `respuesta.title`** — el campo ya no existe → `undefined` → pantalla vacía en producción. Y el release lo aprobó QA.
+
+**Moraleja:** el status dice "el server respondió"; la estructura dice "respondió **lo que espero**". Necesitamos validar las dos cosas — y a eso se le llama **contrato**.
 
 ### 2. JSON Schema: el contrato de la respuesta
 

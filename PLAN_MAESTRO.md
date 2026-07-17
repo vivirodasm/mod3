@@ -21,7 +21,7 @@
 | Diseño de pruebas | Partición de equivalencias (*Equivalence Partitioning*, EP), análisis de valores límite (*Boundary Value Analysis*, BVA), tablas de decisión y pruebas combinatorias | Matriz de trazabilidad + laboratorios ejecutables |
 | Scripts / Patrones | Page Object Model (POM), Screenplay, Don't Repeat Yourself (DRY) · Lenguajes: Java, Python, JavaScript, C# | Laboratorios con Python como lenguaje base; ejemplos comparados en los 4 lenguajes |
 | Datos externos | JSON (*JavaScript Object Notation*), YAML (*YAML Ain't Markup Language*), CSV (*Comma-Separated Values*), bases de datos y mocks | Capa de datos desacoplada de la lógica de pruebas |
-| APIs | Postman (colecciones) + Newman/Postman CLI, REST-assured, Karate DSL, Pact | APIs públicas de práctica |
+| APIs | Postman (colecciones) + Newman/Postman CLI · Python: httpx + pytest · Referencia para ecosistema Java: REST-assured, Karate DSL · Contratos: JSON Schema (con mención de Pact) | APIs públicas de práctica |
 | CI/CD | GitHub Actions, Jenkins, GitLab CI, Azure Pipelines · Docker (Selenium Grid, Playwright, Cypress) | Flujo automatizado del proyecto integrador con disparadores por push, Pull Request y ejecución nocturna |
 | Performance | K6, JMeter (+ Gatling vía Karate) | Scripts de carga como infraestructura como código |
 | Seguridad | OWASP ZAP (*Open Worldwide Application Security Project Zed Attack Proxy*), Burp Suite | Escaneo automatizado de seguridad base |
@@ -39,6 +39,8 @@
 > - **Recheck** → sin mantenimiento activo; lo sustituye la **comparación visual nativa de Playwright**, que ya usamos en el stack.
 > - **Testim** → hoy es Tricentis Testim (comercial); se menciona como referencia y el lab usa **Healenium** (open source) + un demo de reparación de selectores con IA generativa.
 > - **Newman** → sigue vigente y es el que usamos (no requiere cuenta); se menciona **Postman CLI** como su sucesor oficial.
+> - **REST-assured y Karate DSL** → vigentes y mantenidos, pero atados a la JVM (Java + Maven/Gradle); el curso es Python-first y cubre los mismos conceptos (validaciones, contratos, data-driven, paralelo) con **pytest + httpx**. Se presentan como referencia para quien trabaje en ecosistema Java.
+> - **Pact** → el *contract testing* se enseña como concepto con JSON Schema (S3) y contratos en código (S4); Pact se menciona como la herramienta profesional consumidor/proveedor.
 > - Se agregan **Maestro** (móvil, estándar emergente) y **mutmut** (mutación en Python, coherente con los labs del curso).
 
 ---
@@ -77,7 +79,7 @@ Los **retos del curso** se integran directamente al proyecto: Reto 1 (Jenkins + 
 | **S1** ✅ | 3h | **Diseño técnico de pruebas:** partición de equivalencias, valores límite, tablas de decisión, combinatorias · Mantenibilidad (reusabilidad, desacoplamiento, modulación) · Matriz de trazabilidad | Laboratorio de diseño ejecutable + matriz de trazabilidad inicial Requerimientos↔Casos↔Defectos |
 | **S2** ✅ | 3h | **Desarrollo de scripts:** Page Object Model (POM), Screenplay, Don't Repeat Yourself (DRY) · datos/estados de prueba compartidos (*fixtures*), aserciones (*assertions*), manejo de errores, validaciones dinámicas · Datos externos: JSON/YAML/CSV/bases de datos/mocks · Lenguajes: Java, Python, JavaScript, C# | Conjunto base de pruebas de interfaz de usuario con POM + capa de datos externa desacoplada |
 | **S3** | 3h | **APIs y servicios web I:** REST (*Representational State Transfer*) vs SOAP (*Simple Object Access Protocol*) vs GraphQL · Postman (colecciones) + Newman (con mención de Postman CLI, su sucesor oficial) · Validaciones: status, headers, payloads, esquemas JSON/XML (*Extensible Markup Language*) | Colección Postman versionada + Newman en Taskfile (Etapa 2a) |
-| **S4** | 3h | **APIs II:** REST-assured · **Karate DSL** (*Domain-Specific Language*) con Gherkin, paralelo, validaciones JSON/XML y reportes HTML (*HyperText Markup Language*) · **Contratos con Pact** | Suite Karate + contrato Pact consumidor/proveedor (Etapas 2b y 3) |
+| **S4** | 3h | **APIs II — automatización con Python:** cliente httpx con KISS · pytest + fixtures (DRY) · Data-Driven con JSON/YAML · contratos de API en código · Referencia: REST-assured y Karate DSL (*Domain-Specific Language*) para ecosistema Java · concepto de contratos consumidor/proveedor (Pact) | Suite pytest de APIs con cliente propio, fixtures y data-driven (Etapas 2b y 3) |
 | **S5** | 3h | **CI/CD:** GitHub Actions, Jenkins, GitLab CI, Azure Pipelines · disparadores por push, Pull Request y ejecución nocturna · Docker: Selenium Grid, Playwright, Cypress · **Inicio Reto 1** | Jenkinsfile + flujo de GitHub Actions con etapas 1-4 en contenedores |
 | **S6** | 3h | **Performance:** K6 como infraestructura como código (*Infrastructure as Code*, IaC) y JMeter · umbrales (*thresholds*), escenarios de carga · Karate+Gatling · **Cierre Reto 1** (Jenkins + Postman + K6) | Etapa 5 con umbrales de performance como criterio de aprobación — **Reto 1 entregado** |
 | **S7** | 3h | **Seguridad y otras no funcionales:** OWASP ZAP (escaneo base automatizado), Burp Suite · Axe/Lighthouse (WCAG) · Compatibilidad (BrowserStack/SauceLabs/LambdaTest) · **Reto 2** | Etapas 6-7: ZAP + Axe en flujo automatizado — **Reto 2 entregado** |
