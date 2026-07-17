@@ -54,7 +54,7 @@ def test_login_invalido_desde_json(page, username, password, expected_error):
 
 # ── Enfoque B: escenarios de carrito desde YAML (via fixture) ──────────────────
 
-@pytest.mark.parametrize("scenario_idx", [0, 1, 2])
+@pytest.mark.parametrize("scenario_idx", [0, 1, 2, 3])
 def test_carrito_desde_yaml(authenticated_page, cart_scenarios, scenario_idx):
     """Verifica que la burbuja del carrito refleja el número correcto de productos.
 

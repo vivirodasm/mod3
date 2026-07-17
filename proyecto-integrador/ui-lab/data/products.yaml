@@ -33,3 +33,11 @@ cart_scenarios:
       - "Sauce Labs Bike Light"
       - "Sauce Labs Bolt T-Shirt"
     count: 3
+
+  - description: "agregar cuatro productos distintos"
+    items:
+      - "Sauce Labs Backpack"
+      - "Sauce Labs Bike Light"
+      - "Sauce Labs Bolt T-Shirt"
+      - "Sauce Labs Fleece Jacket"
+    count: 4
