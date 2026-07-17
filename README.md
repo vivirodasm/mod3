@@ -1,2 +1,1 @@
-# mod3
-Modulo 3
+# diplomado automatizacion modulo3
