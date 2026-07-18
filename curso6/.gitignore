@@ -1,0 +1,13 @@
+# Privado del instructor — no versionar
+**/instructor_guide.md
+**/GUIA_INSTRUCTOR*
+
+# Artefactos locales de labs
+**/history.om
+**/.venv/
+**/mlruns/
+**/__pycache__/
+**/.pytest_cache/
+**/data/*.csv
+**/data/pipeline_report.json
+.DS_Store

@@ -1,0 +1,68 @@
+volumes:
+  prometheus-data:
+
+services:
+  exporter:
+    build:
+      context: ./exporter
+    container_name: qa-exporter
+    ports:
+      - "8000:8000"
+    environment:
+      EXPORTER_HOST: "0.0.0.0"
+      EXPORTER_PORT: "8000"
+      METRICS_INTERVAL_SECONDS: "10"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Genera bloques TSDB con ~3 días de histórico (solo la primera vez del volumen).
+  seed:
+    image: prom/prometheus:v2.55.1
+    container_name: qa-prometheus-seed
+    user: root
+    volumes:
+      - ./prometheus/seed:/seed:ro
+      - ./scripts/seed_tsdb.sh:/seed_tsdb.sh:ro
+      - prometheus-data:/prometheus
+    entrypoint: ["/bin/sh", "/seed_tsdb.sh"]
+    restart: "no"
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    container_name: qa-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=5d
+      - --web.enable-lifecycle
+    depends_on:
+      exporter:
+        condition: service_healthy
+      seed:
+        condition: service_completed_successfully
+
+  grafana:
+    image: grafana/grafana:11.3.1
+    container_name: qa-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_DATE_FORMATS_DEFAULT_TIMEZONE: browser
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - prometheus

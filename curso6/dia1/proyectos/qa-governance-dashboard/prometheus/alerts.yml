@@ -1,0 +1,38 @@
+groups:
+  - name: qa_governance_critical
+    rules:
+      - alert: HighFlakeRate
+        expr: qa_flake_rate > 0.10
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Flake rate alto en {{ $labels.service }}"
+          description: "qa_flake_rate={{ $value }} supera el umbral 0.10"
+
+      - alert: HighDefectLeakage
+        expr: qa_defect_leakage > 0.12
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Defect leakage alto en {{ $labels.service }}"
+          description: "qa_defect_leakage={{ $value }} supera el umbral 0.12"
+
+      - alert: LowTestEffectiveness
+        expr: qa_test_effectiveness_ratio < 0.85
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Test effectiveness bajo en {{ $labels.service }}"
+          description: "qa_test_effectiveness_ratio={{ $value }} bajo el umbral 0.85"
+
+      - alert: LowCoverage
+        expr: qa_coverage < 70
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Cobertura baja en {{ $labels.service }}"
+          description: "qa_coverage={{ $value }} bajo el umbral 70%"
