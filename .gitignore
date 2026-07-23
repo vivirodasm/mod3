@@ -26,11 +26,3 @@ Thumbs.db
 
 # Instructor-only guides (NOT for students)
 sesiones/**/GUIA_*.md
-
-# Playwright
-node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-/playwright/.auth/

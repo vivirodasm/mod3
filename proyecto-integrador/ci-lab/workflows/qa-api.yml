@@ -1,0 +1,38 @@
+# Plantilla didáctica — espejo de .github/workflows/qa-api.yml
+# En clase: señalá on / permissions / concurrency / jobs / steps.
+
+name: QA API Gate (plantilla Sesión 5)
+
+on:
+  push:
+    paths:
+      - "proyecto-integrador/api-lab/**"
+      - "proyecto-integrador/ci-lab/**"
+  pull_request:
+    paths:
+      - "proyecto-integrador/api-lab/**"
+      - "proyecto-integrador/ci-lab/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: qa-api-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: proyecto-integrador/api-lab
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - run: uv sync --group dev
+      - run: uv run pytest -v
+      - run: uv run pytest -v -k smoke

@@ -1,0 +1,28 @@
+name: ml-data-quality
+
+on:
+  push:
+    paths:
+      - "curso6/dia2/proyectos/ml-data-quality-lab/**"
+  pull_request:
+    paths:
+      - "curso6/dia2/proyectos/ml-data-quality-lab/**"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: curso6/dia2/proyectos/ml-data-quality-lab
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - name: Sync and test
+        run: |
+          uv sync
+          uv run pytest -v
+          uv run python -m src.run_pipeline

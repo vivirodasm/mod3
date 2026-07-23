@@ -1,0 +1,14 @@
+# Corre la misma suite de api-lab que en local, pero dentro de Docker (espejo de CI).
+# Uso desde esta carpeta:
+#   docker compose run --rm test
+#
+# Contexto de build = proyecto-integrador/ (incluye api-lab/)
+
+services:
+  test:
+    build:
+      context: ..
+      dockerfile: ci-lab/Dockerfile
+    container_name: curso-ci-api-test
+    environment:
+      API_BASE_URL: ${API_BASE_URL:-https://jsonplaceholder.typicode.com}
