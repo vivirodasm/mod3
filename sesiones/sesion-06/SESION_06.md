@@ -23,7 +23,7 @@ cd proyecto-integrador/performance
 docker compose up -d target
 
 # 4. Comprueba que responde (Windows: curl.exe · Mac/Linux: curl)
-curl.exe http://127.0.0.1:8080/api/health
+curl.exe http://127.0.0.1:8080/api/health  #se cambio al 8081 
 ```
 
 **Resultado esperado:** un JSON con `"status": "ok"`. El puerto **8080** debe estar libre.
@@ -337,17 +337,17 @@ Hoy cerraste la pieza de **umbrales de performance**.
 
 ### Checklist
 
-- [ ] Distingo una prueba funcional de una de performance
-- [ ] Sé qué es un threshold y por qué **no** es lo mismo que un check
-- [ ] Ubico smoke vs load (y sé que stress/spike existen)
-- [ ] Corrí smoke y load en verde (exit 0)
+- [ x] Distingo una prueba funcional de una de performance
+- [ x] Sé qué es un threshold y por qué **no** es lo mismo que un check
+- [ x] Ubico smoke vs load (y sé que stress/spike existen)
+- [x ] Corrí smoke y load en verde (exit 0)
 - [ ] Provoqué un fallo a propósito y vi checks 100% en verde pero **exit 99**
-- [ ] Relaciono el resultado de K6 con el criterio de CI de la S5
+- [ x] Relaciono el resultado de K6 con el criterio de CI de la S5
 - [ ] Sé la regla práctica para elegir un umbral (baseline + buffer)
 
 ### Frase de cierre (30 s)
 
-Completa: *"Un threshold sirve para ___."*
+Completa: *"Un threshold sirve para ___criterios de aprobacion de la prueba de performance o carga."*
 
 ### Para llevar
 

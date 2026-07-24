@@ -13,7 +13,7 @@
 cd curso/proyecto-integrador/api-lab
 
 # 2. Instala dependencias (solo la primera vez)
-uv sync --group dev
+uv sync --group devcd    #uv sync --group dev  me funciono ese
 
 # 3. Verifica que todo corre
 uv run pytest -v
