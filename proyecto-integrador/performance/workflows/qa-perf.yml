@@ -1,0 +1,48 @@
+# Plantilla didáctica — cómo meter K6 en GitHub Actions (Sesión 6)
+# No está cableada en .github/workflows del repo a propósito:
+# en clase se lee y se entiende el patrón; el lab corre en local con Docker.
+
+name: QA Performance Gate (plantilla Sesión 6)
+
+on:
+  workflow_dispatch:            # botón manual (ideal para demos)
+  push:
+    branches: [main]
+    paths:
+      - "proyecto-integrador/performance/**"
+  # schedule:                   # concepto: load pesado de noche
+  #   - cron: "0 3 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: qa-perf-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  k6-smoke:
+    name: K6 smoke (rápido — apto para PR)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: proyecto-integrador/performance
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start target + run smoke
+        run: |
+          docker compose up -d --wait target
+          docker compose run --rm k6-smoke
+          # Si el threshold se rompe → exit 99 → este job queda ROJO → no merge
+
+  # Concepto (no lo corremos en cada PR: es más pesado):
+  # k6-load:
+  #   name: K6 load (main / nocturno)
+  #   runs-on: ubuntu-latest
+  #   needs: k6-smoke
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - run: |
+  #         cd proyecto-integrador/performance
+  #         docker compose up -d --wait target
+  #         docker compose run --rm k6-load

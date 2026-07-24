@@ -1,0 +1,51 @@
+services:
+  target:
+    image: nginx:1.27-alpine
+    container_name: curso-perf-target
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./target/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./target/index.html:/usr/share/nginx/html/index.html:ro
+      - ./target/api:/usr/share/nginx/html/api:ro
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/api/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  k6-smoke:
+    image: grafana/k6:1.8.0
+    container_name: curso-k6-smoke
+    volumes:
+      - ./k6:/scripts:ro
+    environment:
+      BASE_URL: http://target:8080
+    command: ["run", "/scripts/smoke.js"]
+    depends_on:
+      target:
+        condition: service_healthy
+
+  k6-load:
+    image: grafana/k6:1.8.0
+    container_name: curso-k6-load
+    volumes:
+      - ./k6:/scripts:ro
+    environment:
+      BASE_URL: http://target:8080
+    command: ["run", "/scripts/load.js"]
+    depends_on:
+      target:
+        condition: service_healthy
+
+  k6-fail:
+    image: grafana/k6:1.8.0
+    container_name: curso-k6-fail
+    volumes:
+      - ./k6:/scripts:ro
+    environment:
+      BASE_URL: http://target:8080
+    command: ["run", "/scripts/fail_demo.js"]
+    depends_on:
+      target:
+        condition: service_healthy
